@@ -1,6 +1,5 @@
 # HuTu助手
 
-![Uploading image.png…]()
 
 在 X（Twitter）帖子下面加一个 **AI** 按钮：点一下生成评论草稿，确认后点「回复」自动发出。
 模型可以跑在本机（LM Studio / Ollama），也可以接云端 OpenAI 兼容接口。
