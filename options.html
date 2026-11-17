@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8" />
+<title>HuTu助手 设置</title>
+<style>
+  :root { color-scheme: dark; }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; padding: 28px 20px 60px;
+    background: #0f1114; color: #e7e9ea;
+    font: 14px/1.6 -apple-system, "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
+  }
+  .wrap { max-width: 760px; margin: 0 auto; }
+  h1 { font-size: 20px; margin: 0 0 4px; }
+  .sub { color: #8b98a5; font-size: 12.5px; margin-bottom: 22px; }
+  section {
+    background: #16181c; border: 1px solid #2f3336; border-radius: 14px;
+    padding: 16px 18px; margin-bottom: 14px;
+  }
+  h2 { font-size: 13px; margin: 0 0 12px; color: #8b98a5; font-weight: 600; letter-spacing: .02em; }
+  label { display: block; font-size: 12.5px; color: #b8c2cc; margin: 10px 0 4px; }
+  label:first-of-type { margin-top: 0; }
+  input[type=text], input[type=password], input[type=number], textarea, select {
+    width: 100%; background: #0f1114; color: #e7e9ea;
+    border: 1px solid #2f3336; border-radius: 9px; padding: 8px 10px;
+    font: inherit; font-size: 13px; outline: none;
+  }
+  input:focus, textarea:focus, select:focus { border-color: #1d9bf0; }
+  textarea { resize: vertical; min-height: 70px; }
+  .row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .row3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; }
+  .hint { font-size: 11.5px; color: #6b7783; margin-top: 3px; }
+  .check { display: flex; align-items: flex-start; gap: 8px; margin-top: 10px; font-size: 12.5px; color: #d6d9db; }
+  .check input { margin-top: 3px; }
+  .check b { color: #e7e9ea; font-weight: 600; }
+  .warn { color: #f0b429; }
+  .danger { color: #f4212e; }
+  .bar { display: flex; gap: 10px; align-items: center; margin-top: 18px; }
+  button {
+    border: 1px solid #2f3336; background: #1c1f23; color: #e7e9ea;
+    border-radius: 999px; padding: 8px 18px; font: inherit; font-size: 13px; cursor: pointer;
+  }
+  button:hover { background: #2f3336; }
+  button.primary { background: #1d9bf0; border-color: #1d9bf0; color: #fff; font-weight: 600; }
+  button.primary:hover { background: #1a8cd8; }
+  #status { font-size: 12.5px; color: #8b98a5; }
+  #status.ok { color: #00ba7c; }
+  #status.err { color: #f4212e; }
+  code { background: #0f1114; border: 1px solid #2f3336; border-radius: 5px; padding: 1px 5px; font-size: 12px; }
+  .credit {
+    text-align: center;
+    font-size: 12px;
+    color: #6b7783;
+    margin-top: 28px;
+    padding-top: 16px;
+    border-top: 1px solid #2f3336;
+    letter-spacing: .05em;
+  }
+  .credit a {
+    color: #1d9bf0;
+    text-decoration: none;
+    margin-left: 2px;
+  }
+  .credit a:hover { text-decoration: underline; }
+  ol { margin: 6px 0 0; padding-left: 20px; color: #b8c2cc; font-size: 12.5px; }
+  li { margin: 4px 0; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>HuTu助手</h1>
+  <div class="sub">本地模型生成草稿 · 人工确认后发送 · 数据不出本机</div>
+
+  <section>
+    <h2>本地模型</h2>
+    <label>接口地址（Base URL）</label>
+    <input id="baseUrl" type="text" placeholder="http://127.0.0.1:1234/v1" />
+    <div class="hint">LM Studio：<code>http://127.0.0.1:1234/v1</code>　Ollama：<code>http://127.0.0.1:11434/v1</code></div>
+
+    <div class="row">
+      <div>
+        <label>模型名</label>
+        <select id="model"></select>
+        <div class="hint">点「测试连接」自动拉取已加载的模型</div>
+      </div>
+      <div>
+        <label>API Key（本地一般随便填）</label>
+        <input id="apiKey" type="password" placeholder="lm-studio" />
+      </div>
+    </div>
+
+    <label>人设 / 语气</label>
+    <textarea id="persona" placeholder="普通 X 用户，语气自然、有自己的观点……"></textarea>
+
+    <div class="row3">
+      <div>
+        <label>温度</label>
+        <input id="temperature" type="number" step="0.05" min="0" max="1.5" />
+      </div>
+      <div>
+        <label>最大 token</label>
+        <input id="maxTokens" type="number" step="10" min="32" max="512" />
+      </div>
+      <div>
+        <label>我的账号（不含 @）</label>
+        <input id="myHandle" type="text" placeholder="可选，用来排除自己" />
+      </div>
+    </div>
+
+    <div class="bar">
+      <button id="test">测试连接</button>
+      <span id="status"></span>
+    </div>
+  </section>
+
+  <section>
+    <h2>评论规则（可改）</h2>
+    <textarea id="rulesText" rows="16" spellcheck="false" placeholder="留空则使用内置规则"></textarea>
+    <div class="bar" style="margin-top:10px">
+      <button id="resetRules">恢复默认</button>
+      <span class="hint">这份规则存在当前这台电脑的浏览器里，两台电脑可以各用各的。</span>
+    </div>
+  </section>
+
+  <section>
+    <h2>用法</h2>
+    <div class="hint">装上后打开 x.com，每条推文下面会出现一个 <b>AI</b> 按钮。点它 → 右侧面板显示原帖和草稿，不满意可「重新生成」，满意点「回复」自动发出去。</div>
+  </section>
+
+  <section>
+    <h2>怎么跑起来</h2>
+    <ol>
+      <li>打开 LM Studio → 左侧 <b>Model Server</b> → 点 <b>Start Server</b>，确认端口 1234。</li>
+      <li>在 <b>Chat</b> 里加载 <code>Qwen3-4B</code>。</li>
+      <li>回到这里点「测试连接」，模型下拉框出现名字后点「保存」。</li>
+      <li>打开 <code>x.com</code>，点推文下面的 <b>AI</b> 按钮。</li>
+    </ol>
+    <div class="hint">接口连不上时：确认 LM Studio 里 CORS 已允许（<code>lms server start --cors</code> 或设置里打开），并确认端口与上面一致。</div>
+  </section>
+
+  <div class="bar">
+    <button id="save" class="primary">保存</button>
+    <button id="openX">打开 x.com</button>
+    <span id="saveStatus" style="font-size:12.5px;color:#8b98a5"></span>
+  </div>
+
+  <div class="credit">
+    HuTu制作 ·
+    <a href="https://x.com/MrHuTu_" target="_blank" rel="noopener">主页 @MrHuTu_</a>
+  </div>
+</div>
+<script src="options.js"></script>
+</body>
+</html>
